@@ -28,9 +28,9 @@
 1239.4L 8073.4L
  */
 
-#include <LiquidCrystal.h>
-// initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(9, 8, 7, 6, 5, 4);
+//#include <LiquidCrystal.h>
+//// initialize the library with the numbers of the interface pins
+//LiquidCrystal lcd(9, 8, 7, 6, 5, 4);
 
 // Specify the pins for the two counter reset buttons and indicator LED
 byte resetButtonA = 11;
@@ -55,11 +55,11 @@ unsigned long oldTime;
 
 void setup()
 {
-  lcd.begin(16, 2);
-  lcd.setCursor(0, 0);
-  lcd.print("                ");
-  lcd.setCursor(0, 1);
-  lcd.print("                ");
+//  lcd.begin(16, 2);
+//  lcd.setCursor(0, 0);
+//  lcd.print("                ");
+//  lcd.setCursor(0, 1);
+//  lcd.print("                ");
   
   // Initialize a serial connection for reporting values to the host
   Serial.begin(38400);
@@ -98,14 +98,14 @@ void loop()
   if(digitalRead(resetButtonA) == LOW)
   {
     totalMilliLitresA = 0;
-    lcd.setCursor(0, 1);
-    lcd.print("0L      ");
+//    lcd.setCursor(0, 1);
+//    lcd.print("0L      ");
   }
   if(digitalRead(resetButtonB) == LOW)
   {
     totalMilliLitresB = 0;
-    lcd.setCursor(8, 1);
-    lcd.print("0L      ");
+//    lcd.setCursor(8, 1);
+//    lcd.print("0L      ");
   }
   
   if( (digitalRead(resetButtonA) == LOW) || (digitalRead(resetButtonB) == LOW) )
@@ -173,26 +173,26 @@ void loop()
     Serial.print(" ");             // Output separator
     Serial.println(totalMilliLitresB);
     
-    lcd.setCursor(0, 0);
-    lcd.print("                ");
-    lcd.setCursor(0, 0);
-    lcd.print("Flow: ");
+//    lcd.setCursor(0, 0);
+//    lcd.print("                ");
+//    lcd.setCursor(0, 0);
+//    lcd.print("Flow: ");
     if(int(flowRate) < 10)
     {
-      lcd.print(" ");
+//      lcd.print(" ");
     }
-    lcd.print((int)flowRate);   // Print the integer part of the variable
-    lcd.print('.');             // Print the decimal point
-    lcd.print(frac, DEC) ;      // Print the fractional part of the variable
-    lcd.print(" L");
-    lcd.print("/min");
-    
-    lcd.setCursor(0, 1);
-    lcd.print(int(totalMilliLitresA / 1000));
-    lcd.print("L");
-    lcd.setCursor(8, 1);
-    lcd.print(int(totalMilliLitresB / 1000));
-    lcd.print("L");
+//    lcd.print((int)flowRate);   // Print the integer part of the variable
+//    lcd.print('.');             // Print the decimal point
+//    lcd.print(frac, DEC) ;      // Print the fractional part of the variable
+//    lcd.print(" L");
+//    lcd.print("/min");
+//    
+//    lcd.setCursor(0, 1);
+//    lcd.print(int(totalMilliLitresA / 1000));
+//    lcd.print("L");
+//    lcd.setCursor(8, 1);
+//    lcd.print(int(totalMilliLitresB / 1000));
+//    lcd.print("L");
 
     // Reset the pulse counter so we can start incrementing again
     pulseCount = 0;
