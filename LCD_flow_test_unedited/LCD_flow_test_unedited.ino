@@ -28,9 +28,10 @@
 1239.4L 8073.4L
  */
 
-//#include <LiquidCrystal.h>
-//// initialize the library with the numbers of the interface pins
-//LiquidCrystal lcd(9, 8, 7, 6, 5, 4);
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+int pos = 12;
+LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
 
 // Specify the pins for the two counter reset buttons and indicator LED
 byte resetButtonA = 11;
@@ -55,13 +56,8 @@ unsigned long oldTime;
 
 void setup()
 {
-//  lcd.begin(16, 2);
-//  lcd.setCursor(0, 0);
-//  lcd.print("                ");
-//  lcd.setCursor(0, 1);
-//  lcd.print("                ");
-  
-  // Initialize a serial connection for reporting values to the host
+  lcd.init();
+  lcd.backlight();
   Serial.begin(38400);
    
   // Set up the status LED line as an output
@@ -95,17 +91,19 @@ void setup()
  */
 void loop()
 {
+    
+  
   if(digitalRead(resetButtonA) == LOW)
   {
     totalMilliLitresA = 0;
-//    lcd.setCursor(0, 1);
-//    lcd.print("0L      ");
+    lcd.setCursor(0, 1);
+    lcd.print("0L      ");
   }
   if(digitalRead(resetButtonB) == LOW)
   {
     totalMilliLitresB = 0;
-//    lcd.setCursor(8, 1);
-//    lcd.print("0L      ");
+    lcd.setCursor(8, 1);
+    lcd.print("0L      ");
   }
   
   if( (digitalRead(resetButtonA) == LOW) || (digitalRead(resetButtonB) == LOW) )
@@ -120,8 +118,8 @@ void loop()
     // Disable the interrupt while calculating flow rate and sending the value to
     // the host
     detachInterrupt(sensorInterrupt);
-    //lcd.setCursor(15, 0);
-    //lcd.print("*");
+    lcd.setCursor(15, 0);
+    lcd.print("*");
     
     // Because this loop may not complete in exactly 1 second intervals we calculate
     // the number of milliseconds that have passed since the last execution and use
@@ -148,8 +146,8 @@ void loop()
     // During testing it can be useful to output the literal pulse count value so you
     // can compare that and the calculated flow rate against the data sheets for the
     // flow sensor. Uncomment the following two lines to display the count value.
-    //Serial.print(pulseCount, DEC);
-    //Serial.print("  ");
+    Serial.print(pulseCount, DEC);
+    Serial.print("  ");
     
     // Write the calculated value to the serial port. Because we want to output a
     // floating point value and print() can't handle floats we have to do some trickery
@@ -173,26 +171,26 @@ void loop()
     Serial.print(" ");             // Output separator
     Serial.println(totalMilliLitresB);
     
-//    lcd.setCursor(0, 0);
-//    lcd.print("                ");
-//    lcd.setCursor(0, 0);
-//    lcd.print("Flow: ");
+    lcd.setCursor(0, 0);
+    lcd.print("                ");
+    lcd.setCursor(0, 0);
+    lcd.print("Flow: ");
     if(int(flowRate) < 10)
     {
-//      lcd.print(" ");
+      lcd.print(" ");
     }
-//    lcd.print((int)flowRate);   // Print the integer part of the variable
-//    lcd.print('.');             // Print the decimal point
-//    lcd.print(frac, DEC) ;      // Print the fractional part of the variable
-//    lcd.print(" L");
-//    lcd.print("/min");
-//    
-//    lcd.setCursor(0, 1);
-//    lcd.print(int(totalMilliLitresA / 1000));
-//    lcd.print("L");
-//    lcd.setCursor(8, 1);
-//    lcd.print(int(totalMilliLitresB / 1000));
-//    lcd.print("L");
+    lcd.print((int)flowRate);   // Print the integer part of the variable
+    lcd.print('.');             // Print the decimal point
+    lcd.print(frac, DEC) ;      // Print the fractional part of the variable
+    lcd.print(" L");
+    lcd.print("/min");
+    
+    lcd.setCursor(0, 1);
+    lcd.print(int(totalMilliLitresA / 1000));
+    lcd.print("L");
+    lcd.setCursor(8, 1);
+    lcd.print(int(totalMilliLitresB / 1000));
+    lcd.print("L");
 
     // Reset the pulse counter so we can start incrementing again
     pulseCount = 0;
